@@ -1,0 +1,48 @@
+{
+  "example": [
+    {
+      "ex": "da"
+    }
+  ],
+  "vehicles": [
+    {
+      "routeName": "bla-bla",
+      "vehicleType": "Bus",
+
+      "features": "Bike & Wheelchair",
+      "positions": {
+        "lat": 45,
+        "lng": 43
+      },
+
+      "idVehicle": 2,
+      "direction": "heading to A"
+    },
+    {
+      "routeName": "bla-bla numero 2",
+      "vehicleType": "Tram",
+
+      "features": "Bike & Wheelchair",
+      "positions": {
+        "lat": 35,
+        "lng": 33
+      },
+
+      "idVehicle": 4,
+      "direction": "heading to B"
+    },
+    {
+      "routeName": "daba",
+      "vehicleType": "Bus",
+
+      "features": "Bike & Wheelchair",
+      "positions": {
+        "lat": 45,
+        "lng": 43
+      },
+
+      "idVehicle": 2,
+      "direction": "heading to A"
+    }
+  ]
+}

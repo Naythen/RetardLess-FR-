@@ -6,25 +6,33 @@ import PageNotFound from "./pages/PageNotFound";
 import Who from "./pages/Who";
 import Login from "./pages/Login";
 import AppLayout from "./pages/AppLayout";
+import VehicleList from "./components/VehicleList";
+import BusesList from "./components/BusesList";
+import TramList from "./components/TramList";
+// import Vehicle from "./components/Vehicle";
+import { VehiclesProvider } from "../contexts/VehiclesContext";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route index element={<Homepage />} />
+    <VehiclesProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route index element={<Homepage />} />
 
-        <Route path="login" element={<Login />} />
-        <Route path="who" element={<Who />} />
-        <Route path="app" element={<AppLayout />}>
-          <Route index element={<Navigate replace to="all" />} />
-          <Route path="all" element={<PageNotFound />} />
-          <Route path="buses" element={<PageNotFound />} />
-          <Route path="trams" element={<PageNotFound />} />
-        </Route>
+          <Route path="login" element={<Login />} />
+          <Route path="who" element={<Who />} />
+          <Route path="app" element={<AppLayout />}>
+            <Route index element={<Navigate replace to="all" />} />
+            <Route path="all" element={<VehicleList />} />
+            {/* <Route path="all/:id" element={<Vehicle />} /> */}
+            <Route path="buses" element={<BusesList />} />
+            <Route path="trams" element={<TramList />} />
+          </Route>
 
-        <Route path="*" element={<PageNotFound />} />
-      </Routes>
-    </BrowserRouter>
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </VehiclesProvider>
   );
 }
 

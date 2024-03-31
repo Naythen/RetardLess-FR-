@@ -2,6 +2,10 @@
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
+npm run server
+Runs the fake API at the port
+http://localhost:8001/
+
 npm run dev
 Runs the app in the development mode.
 Open the adress from your console to view it in your browser.

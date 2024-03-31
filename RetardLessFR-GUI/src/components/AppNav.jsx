@@ -9,7 +9,7 @@ function AppNav() {
           <NavLink to="all">All</NavLink>
         </li>
         <li>
-          <NavLink to="cities">Buses</NavLink>
+          <NavLink to="buses">Buses</NavLink>
         </li>
         <li>
           <NavLink to="trams">Trams</NavLink>
