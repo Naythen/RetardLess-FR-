@@ -14,7 +14,7 @@ function VehicleList() {
   return (
     <ul className={styles.vehicleList}>
       {vehicles.map((vehicle) => (
-        <VehicleItem vehicle={vehicle} key={vehicle.idVehicle} />
+        <VehicleItem vehicle={vehicle} key={vehicle.id} />
       ))}
     </ul>
   );

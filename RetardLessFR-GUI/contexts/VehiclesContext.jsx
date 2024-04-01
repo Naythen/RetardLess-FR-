@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
-const URL = "http://localhost:8001";
+const URL = "http://localhost:8000";
 
 const VehiclesContext = createContext();
 
@@ -15,7 +15,7 @@ function VehiclesProvider({ children }) {
         setIsLoading(true);
         const res = await fetch(`${URL}/vehicles`);
         const data = await res.json();
-        setVehicles(data); // vehicles = data
+        setVehicles(data);
       } catch {
         alert("There was an error loading data");
       } finally {
@@ -25,14 +25,14 @@ function VehiclesProvider({ children }) {
     fetchVehicles();
   }, []);
 
-  async function getVehicle(id) {
+  async function getVehicles(id) {
     try {
       setIsLoading(true);
-      const res = await fetch(`${URL}/cities/${id}`);
+      const res = await fetch(`${URL}/vehicles/${id}`);
       const data = await res.json();
       setCurrentVehicle(data);
     } catch {
-      alert("There was an error loading data on get city");
+      alert("There was an error loading data on get Vehicle");
     } finally {
       setIsLoading(false);
     }
@@ -44,7 +44,7 @@ function VehiclesProvider({ children }) {
         vehicles,
         isLoading,
         currentVehicle,
-        getVehicle,
+        getVehicles,
       }}
     >
       {children}

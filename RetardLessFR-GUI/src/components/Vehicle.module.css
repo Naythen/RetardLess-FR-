@@ -1,0 +1,55 @@
+.vehicle {
+  padding: 2rem 3rem;
+  max-height: 70%;
+  background-color: var(--color-dark--2);
+  border-radius: 7px;
+  overflow: scroll;
+
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  /* hide scrollbar*/
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+
+.vehicle::-webkit-scrollbar {
+  /* hide scrollbar*/
+  display: none; /* Safari and Chrome */
+}
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.vehicle h6 {
+  text-transform: uppercase;
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: var(--color-light--1);
+}
+
+.vehicle h3 {
+  font-size: 1.9rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.vehicle h3 span {
+  font-size: 3.2rem;
+  line-height: 1;
+}
+
+.vehicle p {
+  font-size: 1.6rem;
+}
+
+.vehicle a:link,
+.vehicle a:visited {
+  font-size: 1.6rem;
+  color: var(--color-brand--1);
+}

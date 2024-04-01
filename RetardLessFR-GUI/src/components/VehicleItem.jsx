@@ -4,21 +4,18 @@ import { Link } from "react-router-dom";
 import { useVehicles } from "../../contexts/VehiclesContext";
 
 function VehicleiItem({ vehicle }) {
-  const { routeName, vehicleType, idVehicle, positions } = vehicle;
+  const { routeName, vehicleType, id, positions } = vehicle;
   const { currentVehicle } = useVehicles();
 
   const isBus = vehicleType === "Bus" ? true : false;
-  console.log(isBus);
 
   return (
     <li>
       <Link
         className={`${styles.vehicleItem} ${
-          idVehicle === currentVehicle.idVehicle
-            ? styles["vehicleItem--active"]
-            : ""
+          id === currentVehicle.id ? styles["vehicleItem--active"] : ""
         }`}
-        to={`${idVehicle}?lat=${positions.lat}&lng=${positions.lng}`}
+        to={`${id}?lat=${positions.lat}&lng=${positions.lng}`}
       >
         {isBus ? (
           <img src="/bus-icon.png" alt="bus icon" className={styles.icon} />

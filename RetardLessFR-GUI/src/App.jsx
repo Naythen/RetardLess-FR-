@@ -1,4 +1,3 @@
-import "./App.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Homepage from "./pages/Homepage";
@@ -9,7 +8,7 @@ import AppLayout from "./pages/AppLayout";
 import VehicleList from "./components/VehicleList";
 import BusesList from "./components/BusesList";
 import TramList from "./components/TramList";
-// import Vehicle from "./components/Vehicle";
+import Vehicle from "./components/Vehicle";
 import { VehiclesProvider } from "../contexts/VehiclesContext";
 
 function App() {
@@ -24,7 +23,7 @@ function App() {
           <Route path="app" element={<AppLayout />}>
             <Route index element={<Navigate replace to="all" />} />
             <Route path="all" element={<VehicleList />} />
-            {/* <Route path="all/:id" element={<Vehicle />} /> */}
+            <Route path="all/:id" element={<Vehicle />} />
             <Route path="buses" element={<BusesList />} />
             <Route path="trams" element={<TramList />} />
           </Route>

@@ -1,48 +1,43 @@
 {
-  "example": [
-    {
-      "ex": "da"
-    }
-  ],
   "vehicles": [
     {
       "routeName": "bla-bla",
       "vehicleType": "Bus",
 
       "features": "Bike & Wheelchair",
+      "direction": "heading to A",
       "positions": {
         "lat": 45,
         "lng": 43
       },
 
-      "idVehicle": 2,
-      "direction": "heading to A"
+      "id": 2
     },
     {
       "routeName": "bla-bla numero 2",
       "vehicleType": "Tram",
 
       "features": "Bike & Wheelchair",
+      "direction": "heading to B",
       "positions": {
         "lat": 35,
         "lng": 33
       },
 
-      "idVehicle": 4,
-      "direction": "heading to B"
+      "id": 4
     },
     {
       "routeName": "daba",
       "vehicleType": "Bus",
 
       "features": "Bike & Wheelchair",
+      "direction": "heading to A",
       "positions": {
         "lat": 45,
-        "lng": 43
+        "lng": 41
       },
 
-      "idVehicle": 2,
-      "direction": "heading to A"
+      "id": 5
     }
   ]
 }
