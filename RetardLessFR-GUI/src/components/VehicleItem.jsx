@@ -2,12 +2,12 @@
 import styles from "./VehicleItem.module.css";
 import { Link } from "react-router-dom";
 import { useVehicles } from "../../contexts/VehiclesContext";
+import BusIcon from "./BusIcon";
+import TramIcon from "./TramIcon";
 
 function VehicleiItem({ vehicle }) {
   const { routeName, vehicleType, id, positions } = vehicle;
   const { currentVehicle } = useVehicles();
-
-  const isBus = vehicleType === "Bus" ? true : false;
 
   return (
     <li>
@@ -17,11 +17,7 @@ function VehicleiItem({ vehicle }) {
         }`}
         to={`${id}?lat=${positions.lat}&lng=${positions.lng}`}
       >
-        {isBus ? (
-          <img src="/bus-icon.png" alt="bus icon" className={styles.icon} />
-        ) : (
-          <img src="/tram-icon.jpg" alt="bus icon" className={styles.icon} />
-        )}
+        {vehicleType === "Bus" ? <BusIcon /> : <TramIcon />}
 
         <span className={styles.type}> {vehicleType}</span>
         <h3 className={styles.name}>{routeName}</h3>

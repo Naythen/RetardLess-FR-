@@ -24,8 +24,12 @@ function App() {
             <Route index element={<Navigate replace to="all" />} />
             <Route path="all" element={<VehicleList />} />
             <Route path="all/:id" element={<Vehicle />} />
+
             <Route path="buses" element={<BusesList />} />
+            <Route path="buses/:id" element={<Vehicle />} />
+
             <Route path="trams" element={<TramList />} />
+            <Route path="trams/:id" element={<Vehicle />} />
           </Route>
 
           <Route path="*" element={<PageNotFound />} />

@@ -3,7 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import AppNav from "./AppNav";
 import Logo from "./Logo";
 import styles from "./Sidebar.module.css";
-import Button from "./Button";
+import Button from "../components/Button";
 
 function Sidebar() {
   const navigate = useNavigate();
@@ -15,22 +15,35 @@ function Sidebar() {
 
       <Outlet />
 
-      <Button
-        type="back"
-        onClick={(e) => {
-          e.preventDefault();
-          navigate("/");
-        }}
-      >
-        Exit App
-      </Button>
-      {/* <Button type="back">Save</Button> */}
+      <div>
+        <div>
+          <Button
+            type="back"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate("/");
+            }}
+          >
+            Exit App
+          </Button>
 
-      <footer className={styles.footer}>
-        <p className={styles.copyright}>
-          &copy; Copyright {new Date().getFullYear()} by RetardLess Inc.
-        </p>
-      </footer>
+          <Button
+            type="back"
+            onClick={(e) => {
+              e.preventDefault();
+              console.log("data saved");
+            }}
+          >
+            Save Data
+          </Button>
+        </div>
+
+        <footer className={styles.footer}>
+          <p className={styles.copyright}>
+            &copy; Copyright {new Date().getFullYear()} by RetardLess Inc.
+          </p>
+        </footer>
+      </div>
     </div>
   );
 }
