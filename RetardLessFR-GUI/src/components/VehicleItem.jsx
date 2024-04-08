@@ -1,4 +1,3 @@
-//import { useCities } from "../contexts/CitiesContext";
 import styles from "./VehicleItem.module.css";
 import { Link } from "react-router-dom";
 import { useVehicles } from "../../contexts/VehiclesContext";
