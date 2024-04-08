@@ -5,6 +5,13 @@ import { useState } from "react";
 import { useVehicles } from "../../contexts/VehiclesContext";
 import BusIcon from "../components/BusIcon";
 import TramIcon from "./TramIcon";
+import "leaflet/dist/leaflet.css";
+import { Icon } from "leaflet";
+
+const markerIcon = new Icon({
+  iconUrl: "../../public/MarkerIcon.png",
+  iconSize: [30, 40],
+});
 
 function Map() {
   const navigate = useNavigate();
@@ -35,6 +42,7 @@ function Map() {
         />
         {currentVehicle.id !== undefined && (
           <Marker
+            icon={markerIcon}
             position={[
               currentVehicle.positions.lat,
               currentVehicle.positions.lng,

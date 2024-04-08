@@ -17,7 +17,7 @@
       "routeName": "Tatarasi Nord - Ciurea",
       "vehicleType": "Tram",
 
-      "features": "Bike & Wheelchair",
+      "features": "Wheelchair",
       "direction": "heading to Tatarasi",
       "positions": {
         "lat": 47.11966,
@@ -30,7 +30,7 @@
       "routeName": "Podu Ros - Tomesti",
       "vehicleType": "Bus",
 
-      "features": "Bike & Wheelchair",
+      "features": "Bike",
       "direction": "heading to Tomesti",
       "positions": {
         "lat": 47.1308783,
