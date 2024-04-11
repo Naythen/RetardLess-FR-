@@ -6,6 +6,8 @@ import org.junit.rules.TemporaryFolder;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
 public class TransportDataStorageTest {
 
     @Rule
