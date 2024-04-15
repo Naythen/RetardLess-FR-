@@ -30,6 +30,25 @@
 	    <artifactId>json</artifactId>
 	    <version>20090211</version>
 	</dependency>
+<!-- https://mvnrepository.com/artifact/com.squareup.okhttp/okhttp -->
+<dependency>
+    <groupId>com.squareup.okhttp</groupId>
+    <artifactId>okhttp</artifactId>
+    <version>2.7.5</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/com.fasterxml/jackson-xml-databind -->
+<dependency>
+    <groupId>com.fasterxml</groupId>
+    <artifactId>jackson-xml-databind</artifactId>
+    <version>0.6.2</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-databind</artifactId>
+    <version>2.13.1</version> <!-- Asigurați-vă că utilizați cea mai recentă versiune disponibilă -->
+</dependency>
+
   </dependencies> 
  
   <build>
