@@ -1,13 +1,8 @@
 package PR.Pip.ro;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-import com.squareup.okhttp.ResponseBody;
 
 /**
  * Hello world!
@@ -23,7 +18,7 @@ public class App
         while(x)
         {
             String s ="D:\\JavaProjects\\untitled1\\Request\\req";
-            Devazut d=new Devazut();
+            Request d=new Request();
             TimeUnit.SECONDS.sleep(1);
             long timepassed=System.currentTimeMillis()-starttime;
             long secondspassed=timepassed/1000;

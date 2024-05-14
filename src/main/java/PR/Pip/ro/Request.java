@@ -5,14 +5,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import com.squareup.okhttp.ResponseBody;
 
-public class Devazut {
+public class Request {
 	OkHttpClient client = new OkHttpClient();
 
-	Request request = new Request.Builder()
+	com.squareup.okhttp.Request request = new com.squareup.okhttp.Request.Builder()
 	  .url("https://api.tranzy.dev/v1/opendata/vehicles")
 	  .get()
 	  .addHeader("X-Agency-Id", "1")
