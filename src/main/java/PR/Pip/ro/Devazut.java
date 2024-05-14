@@ -1,10 +1,13 @@
-package ro.tuiasi.ac.Proiect_PIP;
+package PR.Pip.ro;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+import com.squareup.okhttp.ResponseBody;
 
 public class Devazut {
 	OkHttpClient client = new OkHttpClient();
@@ -17,17 +20,12 @@ public class Devazut {
 	  .addHeader("X-API-KEY", "UdgWKaz1hA3y1Ubw2C779cLFvxuRcBa7bN8X4uRa")
 	  .build();
 	
-	void request(File file)
-	{
+	public void request(File file) throws IOException {
 		Response response = this.client.newCall(this.request).execute();
         // Handle the response here
         ResponseBody responseBody = response.body();
         String jsonString = responseBody.string();
-        if (responseBody != null) {
-            System.out.println(jsonString);
-        }
-        
-        File file = new File("D:\\work\\1302B\\pipproiect\\testulmeu2.json");
+
         FileWriter writer = new FileWriter(file);
         writer.write(jsonString);
         writer.close();
