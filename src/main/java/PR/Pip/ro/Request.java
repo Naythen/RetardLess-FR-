@@ -31,12 +31,11 @@ public class Request {
         writer.close();
         System.out.println("Content written to the file successfully.");
 	}
-	public static void timedrequest() throws InterruptedException, IOException {
-		boolean x=true;
+	public static void timedrequest(int x) throws InterruptedException, IOException {
 		int displayMinutes=0;
 		long starttime=System.currentTimeMillis();
 		System.out.println("Timer:");
-		while(x)
+		while(x!=0)
 		{
 			String s ="D:\\JavaProjects\\untitled1\\Request\\req";
 			Request d=new Request();
@@ -56,6 +55,7 @@ public class Request {
 				displayMinutes++;
 
 			System.out.println(displayMinutes+"::"+secondspassed);
+			x--;
 		}
 
 	}
