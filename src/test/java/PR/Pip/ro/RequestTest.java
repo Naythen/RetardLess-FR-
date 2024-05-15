@@ -14,7 +14,7 @@ import org.junit.Assert;
 import com.squareup.okhttp.Response;
 import com.squareup.okhttp.ResponseBody;
 
-public class DevazutTest {
+public class RequestTest {
 
     private File tempFile;
 
@@ -30,7 +30,7 @@ public class DevazutTest {
 
     @Test
     public void testRequest() throws IOException {
-        Devazut myClass = new Devazut();
+        Request myClass = new Request();
         myClass.request(tempFile);
 
         Response response = myClass.client.newCall(myClass.request).execute();
