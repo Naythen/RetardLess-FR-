@@ -1,5 +1,7 @@
 package PR.Pip.ro;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -40,12 +42,12 @@ public class RequestTest {
         StringBuilder contentBuilder = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new FileReader(tempFile))) {
             String line;
-            while ((line = br.readLine())!= null) {
+            while ((line = br.readLine()) != null) {
                 contentBuilder.append(line);
                 contentBuilder.append(System.lineSeparator());
             }
         } catch (IOException e) {
-            Assert.assertFalse("An error occurred while reading the file: " + e.getMessage(),true);
+            Assert.assertFalse("An error occurred while reading the file: " + e.getMessage(), true);
         }
         String contentTempFile = contentBuilder.toString();
 
@@ -53,5 +55,19 @@ public class RequestTest {
         jsonString = jsonString.trim();
 
         Assert.assertTrue(jsonString.equals(contentTempFile));
+    }
+
+    @Test
+    public void testTimedRequest() throws InterruptedException, IOException {
+        Request.timedrequest(1);
+        String s = System.getProperty("user.dir");
+        s = s.concat("\\requestfolder\\request_0");
+
+        try {
+            File file = new File(s);
+            assertFalse(file.exists());
+        } catch (Exception e) {
+
+        }
     }
 }
