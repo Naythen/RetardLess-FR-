@@ -31,31 +31,29 @@ public class Request {
         writer.close();
         System.out.println("Content written to the file successfully.");
 	}
-	public static void timedrequest(int x) throws InterruptedException, IOException {
+	public static  void timedrequest(int x) throws InterruptedException, IOException {
 		int displayMinutes=0;
 		long starttime=System.currentTimeMillis();
 		System.out.println("Timer:");
-		while(x!=0)
-		{
-			String s ="D:\\JavaProjects\\untitled1\\Request\\req";
-			Request d=new Request();
+		while(displayMinutes<x) {
+			String s = System.getProperty("user.dir");
+			s = s.concat( "\\requestfolder\\request_");
+			Request d = new Request();
 			TimeUnit.SECONDS.sleep(1);
-			long timepassed=System.currentTimeMillis()-starttime;
-			long secondspassed=timepassed/1000;
-			if(secondspassed==60)
-			{
-				secondspassed=0;
-				starttime=System.currentTimeMillis();
-				s=s.concat(Integer.toString(displayMinutes));
-				s=s.concat(".json");
+			long timepassed = System.currentTimeMillis() - starttime;
+			long secondspassed = timepassed / 1000;
+			if (secondspassed == 60) {
+				secondspassed = 0;
+				starttime = System.currentTimeMillis();
+				s = s.concat(Integer.toString(displayMinutes));
+				s = s.concat(".json");
 				File file = new File(s);
 				d.request(file);
 			}
-			if((secondspassed%60)==0)
+			if ((secondspassed % 60) == 0)
 				displayMinutes++;
 
-			System.out.println(displayMinutes+"::"+secondspassed);
-			x--;
+			System.out.println(displayMinutes + "::" + secondspassed);
 		}
 
 	}
