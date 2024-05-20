@@ -134,7 +134,7 @@ public class JsonBuilder {
         obj.put("route_id", route_id);
 
         // type{
-        obj.put("type", type == 0 ? "Tram" : "Bus");
+        obj.put("vehicleType", type == 0 ? "Tram" : "Bus");
         // bike & chair
         String features = "";
         if (bike.equals("BIKE_ACCESSIBLE")) {
