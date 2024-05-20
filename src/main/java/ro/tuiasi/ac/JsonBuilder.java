@@ -1,13 +1,10 @@
-package PR.Pip.ro;
+package ro.tuiasi.ac;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.function.Consumer;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -16,58 +13,66 @@ import org.json.JSONObject;
  */
 public class JsonBuilder {
 
-    private JSONArray jsonArray;
-    private JSONArray jsonDepou;
-    private JSONArray jsonInMiscare;
+    private JSONObject jsonArray;
+    private JSONObject jsonDepou;
+    private JSONObject jsonInMiscare;
+
+    private int numar_depou = 0;
+    private int numar_miscare = 0;
 
     public JsonBuilder(String filePath) throws Exception {
         // Read the file content into a String
         String fileContent = new String(Files.readAllBytes(Paths.get(filePath)));
-
+        JSONArray temp = new JSONArray(fileContent);
         // Parse the JSON string into a JSONObject
-        jsonArray = new JSONArray(fileContent);
-        jsonDepou = new JSONArray();
-        jsonInMiscare = new JSONArray();
+        setJsonArray(temp);
+        jsonDepou = new JSONObject();
+        jsonInMiscare = new JSONObject();
     }
 
     public void setJsonArray(JSONArray jsonArray) {
-        this.jsonArray = jsonArray;
+        JSONObject temp = new JSONObject();
+        temp.put("vehicles", jsonArray);
+        this.jsonArray = temp;
     }
 
     public void setJsonDeou(JSONArray jsonArray) {
-        this.jsonDepou = jsonArray;
+        JSONObject temp = new JSONObject();
+        temp.put("vehicles", jsonArray);
+        this.jsonDepou = temp;
     }
 
     public void setJsonInMiscare(JSONArray jsonArray) {
-        this.jsonInMiscare = jsonArray;
+        JSONObject temp = new JSONObject();
+        temp.put("vehicles", jsonArray);
+        this.jsonInMiscare = temp;
     }
 
-    public JSONArray getJsonArray() {
+    public JSONObject getJsonArray() {
         return this.jsonArray;
     }
 
-    public JSONArray getJsonDeou() {
+    public JSONObject getJsonDeou() {
         return this.jsonDepou;
     }
 
-    public JSONArray getJsonInMiscare() {
+    public JSONObject getJsonInMiscare() {
         return this.jsonInMiscare;
     }
 
     public void processAllObjects() {
-        JSONArray array = getJsonArray();
+        JSONArray array = this.jsonArray.getJSONArray("vehicles");
         JSONArray jsonArray_full = new JSONArray();
         JSONArray jsonArray_depou = new JSONArray();
         JSONArray jsonArray_miscare = new JSONArray();
+        numar_depou = 0;
+        numar_miscare = 0;
 
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         String curentTime = now.format(formatter);
         String date = curentTime.substring(0, 10);
         int ora = Integer.parseInt(curentTime.substring(11, 13));
-
-        System.out.println(date);
-        System.out.println(ora);
 
         for (int i = 0; i < array.length(); i++) {
             JSONObject currentObject = array.getJSONObject(i);
@@ -78,12 +83,15 @@ public class JsonBuilder {
             jsonArray_full.put(obj);
             if (!obj.getString("time").substring(0, 10).equals(date)) {
                 jsonArray_depou.put(obj);
+                numar_depou++;
                 continue;
             }
             if (ora - Integer.parseInt(obj.getString("time").substring(11, 13)) > 2) {
                 jsonArray_depou.put(obj);
+                numar_depou++;
                 continue;
             }
+            numar_miscare++;
             jsonArray_miscare.put(obj);
         }
 
@@ -123,8 +131,6 @@ public class JsonBuilder {
         obj.put("features", features);
         // lat
         // lon
-        System.out.println(Double.isFinite(lat));
-        System.out.println(Double.isFinite(lon));
         if (Double.isFinite(lat) && Double.isFinite(lon)) {
             JSONObject position = new JSONObject();
             position.put("lat", lat);
