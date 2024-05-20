@@ -60,6 +60,14 @@ public class JsonBuilder {
         return this.jsonInMiscare;
     }
 
+    public int getDepouCount() {
+        return this.numar_depou;
+    }
+
+    public int getMiscareCount() {
+        return this.numar_miscare;
+    }
+
     public void processAllObjects() {
         JSONArray array = this.jsonArray.getJSONArray("vehicles");
         JSONArray jsonArray_full = new JSONArray();
@@ -72,7 +80,12 @@ public class JsonBuilder {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         String curentTime = now.format(formatter);
         String date = curentTime.substring(0, 10);
+        String year_month = curentTime.substring(0, 8);
+        int day = Integer.parseInt(curentTime.substring(8, 10));
         int ora = Integer.parseInt(curentTime.substring(11, 13));
+        System.out.println("curent year: " + year_month);
+        System.out.println("curent day: " + day);
+        System.out.println("curent hour: " + ora);
 
         for (int i = 0; i < array.length(); i++) {
             JSONObject currentObject = array.getJSONObject(i);
@@ -81,18 +94,15 @@ public class JsonBuilder {
                 continue;
             }
             jsonArray_full.put(obj);
-            if (!obj.getString("time").substring(0, 10).equals(date)) {
-                jsonArray_depou.put(obj);
-                numar_depou++;
-                continue;
+            if (obj.getString("time").substring(0, 8).equals(year_month)) {
+                if (day - Integer.parseInt(obj.getString("time").substring(11, 13)) > 1) {
+                    numar_miscare++;
+                    jsonArray_miscare.put(obj);
+                    continue;
+                }
             }
-            if (ora - Integer.parseInt(obj.getString("time").substring(11, 13)) > 2) {
-                jsonArray_depou.put(obj);
-                numar_depou++;
-                continue;
-            }
-            numar_miscare++;
-            jsonArray_miscare.put(obj);
+            jsonArray_depou.put(obj);
+            numar_depou++;
         }
 
         setJsonArray(jsonArray_full);
@@ -102,7 +112,8 @@ public class JsonBuilder {
 
     private JSONObject procesJsonObject(JSONObject jsonObject) {
         JSONObject obj = new JSONObject();
-        int id = jsonObject.optInt("route_id");
+        int id = jsonObject.optInt("id");
+        int route_id = jsonObject.optInt("route_id");
         int type = jsonObject.optInt("vehicle_type");
         String bike = jsonObject.optString("bike_accessible");
         String chair = jsonObject.optString("wheelchair_accessible");
@@ -115,6 +126,13 @@ public class JsonBuilder {
             return null;
         }
         obj.put("id", id);
+
+        // route_id
+        if (route_id == 0) {
+            return null;
+        }
+        obj.put("route_id", route_id);
+
         // type{
         obj.put("type", type == 0 ? "Tram" : "Bus");
         // bike & chair
@@ -174,8 +192,10 @@ public class JsonBuilder {
 
     public static void main(String[] args) {
         try {
+
+            Request.timedrequest(1);
             String DirectoryPath = System.getProperty("user.dir") + "\\Request";
-            String inputFilePath = DirectoryPath + "\\input.json";
+            String inputFilePath = DirectoryPath + "\\req0.json";
             String outputFilePath = DirectoryPath + "\\output.json";
             String depouFilePath = DirectoryPath + "\\depou.json";
             String miscareFilePath = DirectoryPath + "\\miscare.json";
@@ -187,6 +207,9 @@ public class JsonBuilder {
             builder.saveToFile(outputFilePath, "full");
             builder.saveToFile(miscareFilePath, "miscare");
             builder.saveToFile(depouFilePath, "depou");
+
+            System.out.println("numar depou : " + builder.getDepouCount());
+            System.out.println("numar miscare : " + builder.getMiscareCount());
 
             System.out.println("JSON has been successfully modified and saved.");
         } catch (Exception e) {
