@@ -153,7 +153,7 @@ public class JsonBuilder {
             JSONObject position = new JSONObject();
             position.put("lat", lat);
             position.put("lng", lon);
-            obj.put("position", position);
+            obj.put("positions", position);
         } else {
             return null;
         }
