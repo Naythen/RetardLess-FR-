@@ -20,6 +20,14 @@ public class Request {
 			.addHeader("X-API-KEY", "UdgWKaz1hA3y1Ubw2C779cLFvxuRcBa7bN8X4uRa")
 			.build();
 
+	com.squareup.okhttp.Request requestRoutes = new com.squareup.okhttp.Request.Builder()
+			.url("https://api.tranzy.ai/v1/opendata/routes")
+			.get()
+			.addHeader("X-Agency-Id", "1")
+			.addHeader("Accept", "application/json")
+			.addHeader("X-API-KEY", "UdgWKaz1hA3y1Ubw2C779cLFvxuRcBa7bN8X4uRa")
+			.build();
+
 	public void request(File file) throws IOException {
 		Response response = this.client.newCall(this.request).execute();
 		// Handle the response here
@@ -29,7 +37,19 @@ public class Request {
 		FileWriter writer = new FileWriter(file);
 		writer.write(jsonString);
 		writer.close();
-		System.out.println("Content written to the file successfully.");
+		System.out.println("Request content written to the file successfully.");
+	}
+
+	public void requestRoutes(File file) throws IOException {
+		Response response = this.client.newCall(this.requestRoutes).execute();
+		// Handle the response here
+		ResponseBody responseBody = response.body();
+		String jsonString = responseBody.string();
+
+		FileWriter writer = new FileWriter(file);
+		writer.write(jsonString);
+		writer.close();
+		System.out.println("Request routs content written to the file successfully.");
 	}
 
 	public static void timedrequest(int x) throws InterruptedException, IOException {
@@ -48,11 +68,17 @@ public class Request {
 				secondspassed = 0;
 				starttime = System.currentTimeMillis();
 
-				String temp = s + Integer.toString(displayMinutes) + ".json";
-				File file = new File(temp);
+				String temp1 = s + Integer.toString(displayMinutes) + ".json";
+				File file1 = new File(temp1);
+
+				String temp2 = s + "Routs" + Integer.toString(displayMinutes) + ".json";
+				File file2 = new File(temp2);
 
 				Request d = new Request();
-				d.request(file);
+				d.request(file1);
+
+				Request f = new Request();
+				f.requestRoutes(file2);
 			}
 			if ((secondspassed % 3) == 0) {
 				displayMinutes++;

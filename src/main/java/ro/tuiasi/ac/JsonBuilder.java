@@ -17,15 +17,19 @@ public class JsonBuilder {
     private JSONObject jsonDepou;
     private JSONObject jsonInMiscare;
 
+    private JSONArray jsonArrayRouts;
+
     private int numar_depou = 0;
     private int numar_miscare = 0;
 
-    public JsonBuilder(String filePath) throws Exception {
+    public JsonBuilder(String filePath, String fileRouts) throws Exception {
         // Read the file content into a String
         String fileContent = new String(Files.readAllBytes(Paths.get(filePath)));
+        String fileContent1 = new String(Files.readAllBytes(Paths.get(fileRouts)));
         JSONArray temp = new JSONArray(fileContent);
         // Parse the JSON string into a JSONObject
         setJsonArray(temp);
+        setJsonRouts(fileContent1);
         jsonDepou = new JSONObject();
         jsonInMiscare = new JSONObject();
     }
@@ -48,6 +52,10 @@ public class JsonBuilder {
         this.jsonInMiscare = temp;
     }
 
+    public void setJsonRouts(String jsonArray) {
+        this.jsonArrayRouts = new JSONArray(jsonArray);
+    }
+
     public JSONObject getJsonArray() {
         return this.jsonArray;
     }
@@ -60,6 +68,10 @@ public class JsonBuilder {
         return this.jsonInMiscare;
     }
 
+    public JSONArray getJsonRouts() {
+        return this.jsonArrayRouts;
+    }
+
     public int getDepouCount() {
         return this.numar_depou;
     }
@@ -68,18 +80,26 @@ public class JsonBuilder {
         return this.numar_miscare;
     }
 
+    public void setDepouCount(int x) {
+        this.numar_depou = x;
+    }
+
+    public void setMiscareCount(int x) {
+        this.numar_miscare = x;
+    }
+
     public void processAllObjects() {
         JSONArray array = this.jsonArray.getJSONArray("vehicles");
         JSONArray jsonArray_full = new JSONArray();
         JSONArray jsonArray_depou = new JSONArray();
         JSONArray jsonArray_miscare = new JSONArray();
-        numar_depou = 0;
-        numar_miscare = 0;
+        setDepouCount(0);
+        setMiscareCount(0);
 
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         String curentTime = now.format(formatter);
-        String date = curentTime.substring(0, 10);
+        // String date = curentTime.substring(0, 10);
         String year_month = curentTime.substring(0, 8);
         int day = Integer.parseInt(curentTime.substring(8, 10));
         int ora = Integer.parseInt(curentTime.substring(11, 13));
@@ -110,6 +130,24 @@ public class JsonBuilder {
         setJsonInMiscare(jsonArray_miscare);
     }
 
+    private String[] findRouteLongNameByRouteId(int routeId) {
+        JSONArray routesArray = getJsonRouts();
+        String[] r = new String[2];
+        for (int i = 0; i < routesArray.length(); i++) {
+            JSONObject routeObj = routesArray.getJSONObject(i);
+            if (routeObj.getInt("route_id") == routeId) {
+                r[0] = routeObj.getString("route_long_name");
+                String[] words = routeObj.getString("route_desc").split("[\\s-]+");
+                r[1] = words[words.length - 1];
+                if (r[1].length() == 2) {
+                    r[1] = words[words.length - 2] + " " + r[1];
+                }
+                return r;
+            }
+        }
+        return null;
+    }
+
     private JSONObject procesJsonObject(JSONObject jsonObject) {
         JSONObject obj = new JSONObject();
         int id = jsonObject.optInt("id");
@@ -131,7 +169,13 @@ public class JsonBuilder {
         if (route_id == 0) {
             return null;
         }
-        obj.put("route_id", route_id);
+
+        String[] r = findRouteLongNameByRouteId(route_id);
+        if (r == null) {
+            return null;
+        }
+        obj.put("routeName", r[0]);
+        obj.put("direction", r[1]);
 
         // type{
         obj.put("vehicleType", type == 0 ? "Tram" : "Bus");
@@ -196,11 +240,12 @@ public class JsonBuilder {
             Request.timedrequest(1);
             String DirectoryPath = System.getProperty("user.dir") + "\\Request";
             String inputFilePath = DirectoryPath + "\\req0.json";
+            String inputFilePath1 = DirectoryPath + "\\reqRouts0.json";
             String outputFilePath = DirectoryPath + "\\output.json";
             String depouFilePath = DirectoryPath + "\\depou.json";
             String miscareFilePath = DirectoryPath + "\\miscare.json";
 
-            JsonBuilder builder = new JsonBuilder(inputFilePath);
+            JsonBuilder builder = new JsonBuilder(inputFilePath, inputFilePath1);
 
             builder.processAllObjects();
 
