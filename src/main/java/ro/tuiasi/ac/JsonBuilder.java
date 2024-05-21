@@ -137,11 +137,8 @@ public class JsonBuilder {
             JSONObject routeObj = routesArray.getJSONObject(i);
             if (routeObj.getInt("route_id") == routeId) {
                 r[0] = routeObj.getString("route_long_name");
-                String[] words = routeObj.getString("route_desc").split("[\\s-]+");
+                String[] words = routeObj.getString("route_desc").split("-+");
                 r[1] = words[words.length - 1];
-                if (r[1].length() == 2) {
-                    r[1] = words[words.length - 2] + " " + r[1];
-                }
                 return r;
             }
         }
