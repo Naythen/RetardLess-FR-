@@ -8,18 +8,20 @@
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "server": "json-server --watch data/vehicles.json --port 5000 "
+    "server": "json-server --watch data/output.json --port 5000 "
   },
   "dependencies": {
+    "@react-leaflet/core": "^2.1.0",
     "json-server": "^1.0.0-alpha.23",
     "leaflet": "^1.9.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-leaflet": "^4.2.1",
+    "react-leaflet-routing-machine": "^0.0.5",
     "react-router-dom": "^6.22.2"
   },
   "devDependencies": {
-    "@types/react": "^18.2.15",
+    "@types/react": "^18.2.78",
     "@types/react-dom": "^18.2.7",
     "@vitejs/plugin-react": "^4.0.3",
     "eslint": "^8.57.0",
