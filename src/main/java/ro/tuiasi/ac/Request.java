@@ -53,19 +53,31 @@ public class Request {
 			.build();
 
 	/**
+	 * This method is used to handle the response of an HTTP request and write the
+	 * response content to a file.
 	 *
-	 * @param file
-	 * @throws IOException
+	 * @param file     The file to which the response content will be written.
+	 * @param response The HTTP response object containing the response content.
+	 * @throws IOException If an error occurs while writing to the file or handling
+	 *                     the response.
 	 */
 	public void request(final File file, Response response) throws IOException {
-		// Response response = this.client.newCall(this.request).execute();
-		// Handle the response here
+		// Retrieve the response body
 		ResponseBody responseBody = response.body();
+
+		// Convert the response body to a string
 		String jsonString = responseBody.string();
 
+		// Create a FileWriter to write the response content to the file
 		FileWriter writer = new FileWriter(file);
+
+		// Write the response content to the file
 		writer.write(jsonString);
+
+		// Close the FileWriter
 		writer.close();
+
+		// Print a success message
 		System.out.println("Request content written to the file successfully.");
 	}
 
@@ -99,10 +111,16 @@ public class Request {
 	}
 
 	/**
+	 * This method is used to make a timed request to the API endpoints and save the
+	 * responses to separate files.
+	 * The requests are made every 3 seconds and the responses are saved with a
+	 * timestamp in their filenames.
 	 *
-	 * @param x
-	 * @throws InterruptedException
-	 * @throws IOException
+	 * @param x The number of times the requests should be made.
+	 * @throws InterruptedException If the thread is interrupted while waiting for
+	 *                              the next request.
+	 * @throws IOException          If an error occurs while making the request or
+	 *                              writing the response to a file.
 	 */
 	public static void timedrequest(final int x) throws InterruptedException, IOException {
 		int copiex = x;
@@ -146,6 +164,5 @@ public class Request {
 
 			System.out.println(displayMinutes + "::" + secondspassed);
 		}
-
 	}
 }

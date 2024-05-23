@@ -48,26 +48,52 @@ public class JsonBuilder {
     private int numarMiscare = 0;
 
     /**
+     * Constructor for the JsonBuilder class.
      *
-     * @param filePath
-     * @param fileRouts
-     * @throws Exception
+     * @param filePath       The path to the file containing the vehicle data.
+     * @param fileRouts      The path to the file containing the route data.
+     * @param fileStops      The path to the file containing the stop data.
+     * @param fileStopsTimes The path to the file containing the stop times data.
+     * @throws Exception If an error occurs while reading the files or parsing the
+     *                   JSON.
      */
     public JsonBuilder(final String filePath, final String fileRouts, final String fileStops,
             final String fileStopsTimes)
             throws Exception {
-        // Read the file content into a String
+        // Read the content of the filePath file into a string
         final String fileContent = new String(Files.readAllBytes(Paths.get(filePath)));
+
+        // Read the content of the fileRouts file into a string
         final String fileContent1 = new String(Files.readAllBytes(Paths.get(fileRouts)));
+
+        // Read the content of the fileStops file into a string
         final String fileContent2 = new String(Files.readAllBytes(Paths.get(fileStops)));
+
+        // Read the content of the fileStopsTimes file into a string
         final String fileContent3 = new String(Files.readAllBytes(Paths.get(fileStopsTimes)));
+
+        // Parse the JSON string from the filePath file into a JSONArray
         JSONArray temp = new JSONArray(fileContent);
-        // Parse the JSON string into a JSONObject
+
+        // Assign the parsed JSONArray to the jsonArray instance variable
         setJsonArray(temp);
+
+        // Assign the parsed JSON string from the fileRouts file to the jsonArrayRouts
+        // instance variable
         setJsonRouts(fileContent1);
+
+        // Assign the parsed JSON string from the fileStops file to the jsonArrayStops
+        // instance variable
         setJsonStops(fileContent2);
+
+        // Assign the parsed JSON string from the fileStopsTimes file to the
+        // jsonArrayStopsTime instance variable
         setJsonStopsTimes(fileContent3);
+
+        // Create a new JSONObject and assign it to the jsonDepou instance variable
         jsonDepou = new JSONObject();
+
+        // Create a new JSONObject and assign it to the jsonInMiscare instance variable
         jsonInMiscare = new JSONObject();
     }
 
@@ -216,7 +242,9 @@ public class JsonBuilder {
     }
 
     /**
-     *
+     * This method processes all the vehicle objects in the JSON array.
+     * It categorizes the vehicles into those in depou and those in movement.
+     * It also updates the count of vehicles in depou and those in movement.
      */
     public void processAllObjects() {
         JSONArray array = this.jsonArray.getJSONArray("vehicles");
@@ -262,9 +290,12 @@ public class JsonBuilder {
     }
 
     /**
+     * This method finds the route long name and direction by routeId.
      *
-     * @param routeId
-     * @return
+     * @param routeId The routeId for which to find the route long name and
+     *                direction.
+     * @return An array of strings containing the route long name and direction.
+     *         If the routeId is not found, it returns null.
      */
     private String[] findRouteLongNameByRouteId(final int routeId) {
         JSONArray routesArray = getJsonRouts();
@@ -282,9 +313,13 @@ public class JsonBuilder {
     }
 
     /**
+     * This method processes a single JSONObject from the input data and transforms
+     * it into a new JSONObject
+     * with the required format.
      *
-     * @param jsonObject
-     * @return
+     * @param jsonObject The JSONObject to be processed.
+     * @return A new JSONObject with the transformed data, or null if the input data
+     *         is invalid.
      */
     private JSONObject procesJsonObject(final JSONObject jsonObject) {
         JSONObject obj = new JSONObject();
@@ -298,16 +333,19 @@ public class JsonBuilder {
         String time = jsonObject.optString("timestamp");
 
         // id
+        // If the id is 0, return null to indicate invalid data.
         if (id == 0) {
             return null;
         }
         obj.put("id", id);
 
         // route_id
+        // If the routeId is 0, return null to indicate invalid data.
         if (routeId == 0) {
             return null;
         }
 
+        // Find the route long name and direction by routeId.
         String[] r = findRouteLongNameByRouteId(routeId);
         if (r == null) {
             return null;
@@ -315,9 +353,12 @@ public class JsonBuilder {
         obj.put("routeName", r[0]);
         obj.put("direction", r[1]);
 
-        // type{
+        // type
+        // Convert the vehicle type to a string representation.
         obj.put("vehicleType", type == 0 ? "Tram" : "Bus");
+
         // bike & chair
+        // Build a string representation of the bike and chair accessibility features.
         String features = "";
         if (bike.equals("BIKE_ACCESSIBLE")) {
             features += "BIKE";
@@ -329,8 +370,10 @@ public class JsonBuilder {
             features += "WHEELCHAIR";
         }
         obj.put("features", features);
-        // lat
-        // lon
+
+        // lat & lon
+        // If the latitude or longitude is not finite, return null to indicate invalid
+        // data.
         if (Double.isFinite(lat) && Double.isFinite(lon)) {
             JSONObject position = new JSONObject();
             position.put("lat", lat);
@@ -339,31 +382,67 @@ public class JsonBuilder {
         } else {
             return null;
         }
+
+        // opriri
+        // Find the number of stop times by the stop ID obtained from the latitude and
+        // longitude.
         int stops = getStopTimes(getStop(lat, lon));
         obj.put("opriri", stops);
+
         // time
+        // If the time is null, return null to indicate invalid data.
         if (time == null) {
             return null;
         }
         obj.put("time", time);
-        // return jsonObject;
+
+        // Return the transformed JSONObject.
         return obj;
     }
 
+    /**
+     * This method retrieves the number of stop times for a given stop ID.
+     *
+     * @param stop_id The ID of the stop for which to retrieve the stop times.
+     * @return The number of stop times for the given stop ID. If the stop ID is 0,
+     *         it returns 0. If the stop ID is not found in the stop times array,
+     *         it returns 0.
+     */
     public int getStopTimes(int stop_id) {
+        // If the stop ID is 0, return 0
         if (stop_id == 0) {
             return 0;
         }
+
+        // Get the array of stop times from the JSON object
         JSONArray stops = getJsonStopsTime();
+
+        // Iterate through each stop time in the array
         for (Object stop : stops) {
             JSONObject stopj = (JSONObject) stop;
+
+            // If the current stop time's stop ID matches the given stop ID,
+            // return the stop sequence
             if (stopj.getInt("stop_id") == stop_id) {
                 return stopj.getInt("stop_sequence");
             }
         }
+
+        // If the stop ID is not found in the stop times array, return 0
         return 0;
     }
 
+    /**
+     * This method retrieves the stop ID based on the given latitude and longitude.
+     * It checks if the latitude and longitude are valid, then iterates through the
+     * array of stops
+     * to find a match within a certain radius.
+     *
+     * @param lat The latitude of the location.
+     * @param lon The longitude of the location.
+     * @return The stop ID if a match is found within the radius, otherwise returns
+     *         0.
+     */
     public int getStop(double lat, double lon) {
         // Check if latitude and longitude are valid
         if (lat <= 0 || lon <= 0) {
@@ -394,42 +473,62 @@ public class JsonBuilder {
     }
 
     /**
+     * This method saves the processed JSON data to a file.
      *
-     * @param outputFilePath
-     * @param indexJsonArray
-     * @throws IOException
+     * @param outputFilePath The path where the output file will be saved.
+     * @param indexJsonArray The index of the JSON array to be saved. It can be one
+     *                       of the following:
+     *                       - "full": Saves the full processed JSON data.
+     *                       - "depou": Saves the JSON data of vehicles in depou.
+     *                       - "miscare": Saves the JSON data of vehicles in
+     *                       movement.
+     * @throws IOException If an error occurs while writing the file.
      */
     public void saveToFile(final String outputFilePath, final String indexJsonArray) throws IOException {
         // Convert the JSONObject to a string
         String jsonString;
 
+        // Determine which JSON array to save based on the indexJsonArray parameter
         switch (indexJsonArray) {
             case "full":
+                // Save the full processed JSON data
                 jsonString = getJsonArray().toString();
                 break;
             case "depou":
+                // Save the JSON data of vehicles in depou
                 jsonString = getJsonDeou().toString();
                 break;
             case "miscare":
+                // Save the JSON data of vehicles in movement
                 jsonString = getJsonInMiscare().toString();
                 break;
             default:
+                // Invalid indexJsonArray parameter
                 System.out.println("err");
                 return;
         }
+
         // Write the string to a file
         Files.write(Paths.get(outputFilePath), jsonString.getBytes());
     }
 
     /**
+     * This is the main method for running the program.
+     * It initializes the necessary variables, processes the data, and saves the
+     * results to output files.
      *
-     * @param args
+     * @param args Command-line arguments (not used in this program).
      */
     public static void main(final String[] args) {
         try {
 
+            // Make a timed request to retrieve data
             Request.timedrequest(1);
+
+            // Define the directory path for input and output files
             String directoryPath = System.getProperty("user.dir") + "\\Request";
+
+            // Define the file paths for input and output files
             String inputFilePath = directoryPath + "\\reqVehicule0.json";
             String inputFilePath1 = directoryPath + "\\reqRouts0.json";
             String inputFilePath2 = directoryPath + "\\reqStops0.json";
@@ -438,21 +537,28 @@ public class JsonBuilder {
             String depouFilePath = directoryPath + "\\depou.json";
             String miscareFilePath = directoryPath + "\\miscare.json";
 
+            // Make a timed request to retrieve data
             Request.timedrequest(0);
 
+            // Create a new JsonBuilder object with the input file paths
             JsonBuilder builder = new JsonBuilder(inputFilePath, inputFilePath1, inputFilePath2, inputFilePath3);
 
+            // Process the data in the JsonBuilder object
             builder.processAllObjects();
 
+            // Save the processed data to output files
             builder.saveToFile(outputFilePath, "full");
             builder.saveToFile(miscareFilePath, "miscare");
             builder.saveToFile(depouFilePath, "depou");
 
+            // Print the counts of vehicles in depou and in movement
             System.out.println("numar depou : " + builder.getDepouCount());
             System.out.println("numar miscare : " + builder.getMiscareCount());
 
+            // Print a success message
             System.out.println("JSON has been successfully modified and saved.");
         } catch (Exception e) {
+            // Print the error message if an exception occurs
             e.printStackTrace();
             System.err.println("An error occurred: " + e.getMessage());
         }
