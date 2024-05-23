@@ -10,9 +10,14 @@ import com.squareup.okhttp.Response;
 import com.squareup.okhttp.ResponseBody;
 
 public class Request {
-	OkHttpClient client = new OkHttpClient();
-
-	com.squareup.okhttp.Request request = new com.squareup.okhttp.Request.Builder()
+	/**
+	 *
+	 */
+	private OkHttpClient client = new OkHttpClient();
+	/**
+	 *
+	 */
+	private com.squareup.okhttp.Request request = new com.squareup.okhttp.Request.Builder()
 			.url("https://api.tranzy.dev/v1/opendata/vehicles")
 			.get()
 			.addHeader("X-Agency-Id", "1")
@@ -20,7 +25,10 @@ public class Request {
 			.addHeader("X-API-KEY", "UdgWKaz1hA3y1Ubw2C779cLFvxuRcBa7bN8X4uRa")
 			.build();
 
-	com.squareup.okhttp.Request requestRoutes = new com.squareup.okhttp.Request.Builder()
+	/**
+	 *
+	 */
+	private com.squareup.okhttp.Request requestRoutes = new com.squareup.okhttp.Request.Builder()
 			.url("https://api.tranzy.ai/v1/opendata/routes")
 			.get()
 			.addHeader("X-Agency-Id", "1")
@@ -28,7 +36,12 @@ public class Request {
 			.addHeader("X-API-KEY", "UdgWKaz1hA3y1Ubw2C779cLFvxuRcBa7bN8X4uRa")
 			.build();
 
-	public void request(File file) throws IOException {
+	/**
+	 *
+	 * @param file
+	 * @throws IOException
+	 */
+	public void request(final File file) throws IOException {
 		Response response = this.client.newCall(this.request).execute();
 		// Handle the response here
 		ResponseBody responseBody = response.body();
@@ -40,7 +53,12 @@ public class Request {
 		System.out.println("Request content written to the file successfully.");
 	}
 
-	public void requestRoutes(File file) throws IOException {
+	/**
+	 *
+	 * @param file
+	 * @throws IOException
+	 */
+	public void requestRoutes(final File file) throws IOException {
 		Response response = this.client.newCall(this.requestRoutes).execute();
 		// Handle the response here
 		ResponseBody responseBody = response.body();
@@ -52,7 +70,14 @@ public class Request {
 		System.out.println("Request routs content written to the file successfully.");
 	}
 
-	public static void timedrequest(int x) throws InterruptedException, IOException {
+	/**
+	 *
+	 * @param x
+	 * @throws InterruptedException
+	 * @throws IOException
+	 */
+	public static void timedrequest(final int x) throws InterruptedException, IOException {
+		int copiex = x;
 		int displayMinutes = 0;
 		long starttime = System.currentTimeMillis();
 		String s = System.getProperty("user.dir") + "/Request/req";
@@ -82,7 +107,7 @@ public class Request {
 			}
 			if ((secondspassed % 3) == 0) {
 				displayMinutes++;
-				x--;
+				copiex--;
 			}
 
 			System.out.println(displayMinutes + "::" + secondspassed);
