@@ -1,10 +1,12 @@
 package ro.tuiasi.ac;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -31,35 +33,50 @@ public class JsonBuilder {
     /**
      *
      */
+    private JSONArray jsonArrayStops;
+    /**
+     *
+     */
+    private JSONArray jsonArrayStopsTime;
+    /**
+     *
+     */
     private int numarDepou = 0;
     /**
      *
      */
     private int numarMiscare = 0;
+
     /**
      *
      * @param filePath
      * @param fileRouts
      * @throws Exception
      */
-    public JsonBuilder(final String filePath, final String fileRouts)
+    public JsonBuilder(final String filePath, final String fileRouts, final String fileStops,
+            final String fileStopsTimes)
             throws Exception {
         // Read the file content into a String
-       final String fileContent =
-               new String(Files.readAllBytes(Paths.get(filePath)));
-       final String fileContent1 =
-               new String(Files.readAllBytes(Paths.get(fileRouts)));
+        final String fileContent = new String(Files.readAllBytes(Paths.get(filePath)));
+        final String fileContent1 = new String(Files.readAllBytes(Paths.get(fileRouts)));
+        final String fileContent2 = new String(Files.readAllBytes(Paths.get(fileStops)));
+        final String fileContent3 = new String(Files.readAllBytes(Paths.get(fileStopsTimes)));
         JSONArray temp = new JSONArray(fileContent);
         // Parse the JSON string into a JSONObject
         setJsonArray(temp);
         setJsonRouts(fileContent1);
+        setJsonStops(fileContent2);
+        setJsonStopsTimes(fileContent3);
         jsonDepou = new JSONObject();
         jsonInMiscare = new JSONObject();
     }
 
     /**
+     * This method sets the JSONArray for the vehicles.
+     * It wraps the given JSONArray into a JSONObject with the key "vehicles".
      *
-     * @param jsonArray
+     * @param jsonArray The JSONArray containing the vehicle data.
+     * @return void
      */
     public void setJsonArray(final JSONArray jsonArray) {
         JSONObject temp = new JSONObject();
@@ -68,8 +85,11 @@ public class JsonBuilder {
     }
 
     /**
+     * This method sets the JSONArray for the vehicles that are in depou.
+     * It wraps the given JSONArray into a JSONObject with the key "vehicles".
      *
-     * @param jsonArray
+     * @param jsonArray The JSONArray containing the vehicle data that are in depou.
+     * @return void
      */
     public void setJsonDeou(final JSONArray jsonArray) {
         JSONObject temp = new JSONObject();
@@ -78,8 +98,12 @@ public class JsonBuilder {
     }
 
     /**
+     * This method sets the JSONArray for the vehicles that are in movement.
+     * It wraps the given JSONArray into a JSONObject with the key "vehicles".
      *
-     * @param jsonArray
+     * @param jsonArray The JSONArray containing the vehicle data that are in
+     *                  movement.
+     * @return void
      */
     public void setJsonInMiscare(final JSONArray jsonArray) {
         JSONObject temp = new JSONObject();
@@ -88,11 +112,35 @@ public class JsonBuilder {
     }
 
     /**
+     * This method sets the JSONArray for the vehicle routes.
+     * It parses the given JSON string into a JSONArray and assigns it to the
+     * 'jsonArrayRouts' instance variable.
      *
-     * @param jsonArray
+     * @param jsonArray A JSON string containing the vehicle route data.
+     * @return void
      */
     public void setJsonRouts(final String jsonArray) {
-        this.jsonArrayRouts = new JSONArray(jsonArray);
+        try {
+            this.jsonArrayRouts = new JSONArray(jsonArray);
+        } catch (JSONException e) {
+            System.err.println("Failed to parse JSON array: " + e.getMessage());
+        }
+    }
+
+    public void setJsonStops(final String jsonArray) {
+        try {
+            this.jsonArrayStops = new JSONArray(jsonArray);
+        } catch (JSONException e) {
+            System.err.println("Failed to parse JSON array: " + e.getMessage());
+        }
+    }
+
+    public void setJsonStopsTimes(final String jsonArray) {
+        try {
+            this.jsonArrayStopsTime = new JSONArray(jsonArray);
+        } catch (JSONException e) {
+            System.err.println("Failed to parse JSON array: " + e.getMessage());
+        }
     }
 
     /**
@@ -125,6 +173,14 @@ public class JsonBuilder {
      */
     public JSONArray getJsonRouts() {
         return this.jsonArrayRouts;
+    }
+
+    public JSONArray getJsonStops() {
+        return this.jsonArrayStops;
+    }
+
+    public JSONArray getJsonStopsTime() {
+        return this.jsonArrayStopsTime;
     }
 
     /**
@@ -171,8 +227,7 @@ public class JsonBuilder {
         setMiscareCount(0);
 
         LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter =
-                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         String curentTime = now.format(formatter);
         // String date = curentTime.substring(0, 10);
         String yearMonth = curentTime.substring(0, 8);
@@ -184,6 +239,7 @@ public class JsonBuilder {
 
         for (int i = 0; i < array.length(); i++) {
             JSONObject currentObject = array.getJSONObject(i);
+
             JSONObject obj = procesJsonObject(currentObject);
             if (obj == null) {
                 continue;
@@ -283,6 +339,8 @@ public class JsonBuilder {
         } else {
             return null;
         }
+        int stops = getStopTimes(getStop(lat, lon));
+        obj.put("opriri", stops);
         // time
         if (time == null) {
             return null;
@@ -290,6 +348,49 @@ public class JsonBuilder {
         obj.put("time", time);
         // return jsonObject;
         return obj;
+    }
+
+    public int getStopTimes(int stop_id) {
+        if (stop_id == 0) {
+            return 0;
+        }
+        JSONArray stops = getJsonStopsTime();
+        for (Object stop : stops) {
+            JSONObject stopj = (JSONObject) stop;
+            if (stopj.getInt("stop_id") == stop_id) {
+                return stopj.getInt("stop_sequence");
+            }
+        }
+        return 0;
+    }
+
+    public int getStop(double lat, double lon) {
+        // Check if latitude and longitude are valid
+        if (lat <= 0 || lon <= 0) {
+            return 0;
+        }
+
+        // Get the array of stops from the JSON object
+        JSONArray array = this.getJsonStops();
+
+        // Iterate through each stop in the array
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject stop = array.getJSONObject(i);
+
+            // Get the latitude and longitude of the current stop
+            int stopLat = stop.getInt("stop_lat");
+            int stopLon = stop.getInt("stop_lon");
+
+            // Check if the current stop is within a certain radius of the given latitude
+            // and longitude
+            if (Math.abs(stopLat - lat) <= 0.00002 && Math.abs(stopLon - lon) <= 0.00002) {
+                // Return the stop ID if a match is found
+                return stop.getInt("stop_id");
+            }
+        }
+
+        // Return 0 if no stop is found within the radius
+        return 0;
     }
 
     /**
@@ -329,13 +430,17 @@ public class JsonBuilder {
 
             Request.timedrequest(1);
             String directoryPath = System.getProperty("user.dir") + "\\Request";
-            String inputFilePath = directoryPath + "\\req0.json";
+            String inputFilePath = directoryPath + "\\reqVehicule0.json";
             String inputFilePath1 = directoryPath + "\\reqRouts0.json";
+            String inputFilePath2 = directoryPath + "\\reqStops0.json";
+            String inputFilePath3 = directoryPath + "\\reqStopTimes0.json";
             String outputFilePath = directoryPath + "\\output.json";
             String depouFilePath = directoryPath + "\\depou.json";
             String miscareFilePath = directoryPath + "\\miscare.json";
 
-            JsonBuilder builder = new JsonBuilder(inputFilePath, inputFilePath1);
+            Request.timedrequest(0);
+
+            JsonBuilder builder = new JsonBuilder(inputFilePath, inputFilePath1, inputFilePath2, inputFilePath3);
 
             builder.processAllObjects();
 

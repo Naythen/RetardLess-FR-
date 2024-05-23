@@ -36,13 +36,29 @@ public class Request {
 			.addHeader("X-API-KEY", "UdgWKaz1hA3y1Ubw2C779cLFvxuRcBa7bN8X4uRa")
 			.build();
 
+	private com.squareup.okhttp.Request requestS = new com.squareup.okhttp.Request.Builder()
+			.url("https://api.tranzy.ai/v1/opendata/stop_times")
+			.get()
+			.addHeader("X-Agency-Id", "1")
+			.addHeader("Accept", "application/json")
+			.addHeader("X-API-KEY", "UdgWKaz1hA3y1Ubw2C779cLFvxuRcBa7bN8X4uRa")
+			.build();
+
+	private com.squareup.okhttp.Request requestST = new com.squareup.okhttp.Request.Builder()
+			.url("https://api.tranzy.ai/v1/opendata/stops")
+			.get()
+			.addHeader("X-Agency-Id", "1")
+			.addHeader("Accept", "application/json")
+			.addHeader("X-API-KEY", "UdgWKaz1hA3y1Ubw2C779cLFvxuRcBa7bN8X4uRa")
+			.build();
+
 	/**
 	 *
 	 * @param file
 	 * @throws IOException
 	 */
-	public void request(final File file) throws IOException {
-		Response response = this.client.newCall(this.request).execute();
+	public void request(final File file, Response response) throws IOException {
+		// Response response = this.client.newCall(this.request).execute();
 		// Handle the response here
 		ResponseBody responseBody = response.body();
 		String jsonString = responseBody.string();
@@ -61,13 +77,25 @@ public class Request {
 	public void requestRoutes(final File file) throws IOException {
 		Response response = this.client.newCall(this.requestRoutes).execute();
 		// Handle the response here
-		ResponseBody responseBody = response.body();
-		String jsonString = responseBody.string();
+		request(file, response);
+	}
 
-		FileWriter writer = new FileWriter(file);
-		writer.write(jsonString);
-		writer.close();
-		System.out.println("Request routs content written to the file successfully.");
+	public void requestVehicule(final File file) throws IOException {
+		Response response = this.client.newCall(this.request).execute();
+		// Handle the response here
+		request(file, response);
+	}
+
+	public void requestStops(final File file) throws IOException {
+		Response response = this.client.newCall(this.requestS).execute();
+		// Handle the response here
+		request(file, response);
+	}
+
+	public void requestStopsTimes(final File file) throws IOException {
+		Response response = this.client.newCall(this.requestST).execute();
+		// Handle the response here
+		request(file, response);
 	}
 
 	/**
@@ -82,7 +110,7 @@ public class Request {
 		long starttime = System.currentTimeMillis();
 		String s = System.getProperty("user.dir") + "/Request/req";
 		System.out.println("Timer:");
-		while (x != 0) {
+		while (copiex != 0) {
 
 			TimeUnit.SECONDS.sleep(1);
 			long timepassed = System.currentTimeMillis() - starttime;
@@ -93,17 +121,23 @@ public class Request {
 				secondspassed = 0;
 				starttime = System.currentTimeMillis();
 
-				String temp1 = s + Integer.toString(displayMinutes) + ".json";
+				String temp1 = s + "Vehicule" + Integer.toString(displayMinutes) + ".json";
 				File file1 = new File(temp1);
 
 				String temp2 = s + "Routs" + Integer.toString(displayMinutes) + ".json";
 				File file2 = new File(temp2);
 
-				Request d = new Request();
-				d.request(file1);
+				String temp3 = s + "Stops" + Integer.toString(displayMinutes) + ".json";
+				File file3 = new File(temp3);
 
-				Request f = new Request();
-				f.requestRoutes(file2);
+				String temp4 = s + "StopTimes" + Integer.toString(displayMinutes) + ".json";
+				File file4 = new File(temp4);
+
+				Request d = new Request();
+				d.requestVehicule(file1);
+				d.requestRoutes(file2);
+				d.requestStops(file4);
+				d.requestStopsTimes(file3);
 			}
 			if ((secondspassed % 3) == 0) {
 				displayMinutes++;
