@@ -6,7 +6,13 @@ import static ro.tuiasi.ac.Request.timedrequest;
 /**
  *
  */
-public class App {
+public final class App {
+    /**
+     *
+     */
+    private App() {
+
+    };
     /**
      * @param args
      * @throws InterruptedException
