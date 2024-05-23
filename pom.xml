@@ -63,10 +63,7 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.8.1</version>
-          <configuration>
-            <release>11</release>
-            <compilerArgs>--add-modules=java.xml.bind</compilerArgs>
-          </configuration>
+
         </plugin>
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
