@@ -13,11 +13,11 @@ public class Request {
 	/**
 	 *
 	 */
-	private OkHttpClient client = new OkHttpClient();
+    OkHttpClient client = new OkHttpClient();
 	/**
 	 *
 	 */
-	private com.squareup.okhttp.Request request = new com.squareup.okhttp.Request.Builder()
+    com.squareup.okhttp.Request request = new com.squareup.okhttp.Request.Builder()
 			.url("https://api.tranzy.dev/v1/opendata/vehicles")
 			.get()
 			.addHeader("X-Agency-Id", "1")
