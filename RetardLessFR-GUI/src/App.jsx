@@ -1,15 +1,41 @@
-import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Homepage from "../pages/Homepage";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
+import Homepage from "./pages/Homepage";
+import PageNotFound from "./pages/PageNotFound";
+import Who from "./pages/Who";
+import Login from "./pages/Login";
+import AppLayout from "./pages/AppLayout";
+import VehicleList from "./components/VehicleList";
+import BusesList from "./components/BusesList";
+import TramList from "./components/TramList";
+import Vehicle from "./components/Vehicle";
+import { VehiclesProvider } from "../contexts/VehiclesContext";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route index element={<Homepage />} />
-        <Route path="app" element={<h1>da</h1>}></Route>
-      </Routes>
-    </BrowserRouter>
+    <VehiclesProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route index element={<Homepage />} />
+
+          <Route path="login" element={<Login />} />
+          <Route path="who" element={<Who />} />
+          <Route path="app" element={<AppLayout />}>
+            <Route index element={<Navigate replace to="all" />} />
+            <Route path="all" element={<VehicleList />} />
+            <Route path="all/:id" element={<Vehicle />} />
+
+            <Route path="buses" element={<BusesList />} />
+            <Route path="buses/:id" element={<Vehicle />} />
+
+            <Route path="trams" element={<TramList />} />
+            <Route path="trams/:id" element={<Vehicle />} />
+          </Route>
+
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </VehiclesProvider>
   );
 }
 

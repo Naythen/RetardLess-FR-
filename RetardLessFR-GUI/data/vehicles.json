@@ -1,0 +1,43 @@
+{
+  "vehicles": [
+    {
+      "routeName": "Targu Cucu - Albinet",
+      "vehicleType": "Bus",
+
+      "features": "Bike & Wheelchair",
+      "direction": "heading to Albinet",
+      "positions": {
+        "lat": 47.1521249,
+        "lng": 27.6028183
+      },
+
+      "id": 2
+    },
+    {
+      "routeName": "Tatarasi Nord - Ciurea",
+      "vehicleType": "Tram",
+
+      "features": "Wheelchair",
+      "direction": "heading to Tatarasi",
+      "positions": {
+        "lat": 47.11966,
+        "lng": 27.5645333
+      },
+
+      "id": 4
+    },
+    {
+      "routeName": "Podu Ros - Tomesti",
+      "vehicleType": "Bus",
+
+      "features": "Bike",
+      "direction": "heading to Tomesti",
+      "positions": {
+        "lat": 47.1308783,
+        "lng": 27.6980916
+      },
+
+      "id": 5
+    }
+  ]
+}
