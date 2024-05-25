@@ -300,7 +300,7 @@ public class JsonBuilder {
      * @return An array of strings containing the route long name and direction.
      *         If the routeId is not found, it returns null.
      */
-    private String[] findRouteLongNameByRouteId(final int routeId) {
+    public String[] findRouteLongNameByRouteId(final int routeId) {
         JSONArray routesArray = getJsonRouts();
         String[] r = new String[2];
         for (int i = 0; i < routesArray.length(); i++) {
@@ -460,8 +460,8 @@ public class JsonBuilder {
             JSONObject stop = array.getJSONObject(i);
 
             // Get the latitude and longitude of the current stop
-            int stopLat = stop.getInt("stop_lat");
-            int stopLon = stop.getInt("stop_lon");
+            double stopLat = stop.getDouble("stop_lat");
+            double stopLon = stop.getDouble("stop_lon");
 
             // Check if the current stop is within a certain radius of the given latitude
             // and longitude
@@ -507,7 +507,7 @@ public class JsonBuilder {
                 break;
             default:
                 // Invalid indexJsonArray parameter
-                System.out.println("err");
+                System.out.println("error save, invalide options");
                 return;
         }
 
