@@ -47,6 +47,9 @@ public class JsonBuilder {
      */
     private int numarMiscare = 0;
 
+    public JsonBuilder() {
+    }
+
     /**
      * Constructor for the JsonBuilder class.
      *
